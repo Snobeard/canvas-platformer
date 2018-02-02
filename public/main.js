@@ -13,43 +13,46 @@ console.log('MAIN.JS: -LOADED-');
 })();
 
 // ==================================================
-// ================== CANVAS SETUP ==================
+// =============== KEYBOARD LISTENERS ===============
 // ==================================================
 let keyboard = {};
 
-let UP = false;
-// ==================================================
-// =============== KEYBOARD LISTENERS ===============
-// ==================================================
+let player = new Player();
+let brick = new Brick();
+let brick2 = new Brick(100, 200);
+let brick3 = new Brick(200, 100, 20, 10);
+
 document.addEventListener('keydown', (event) => {
   // console.log(event.keyCode);
   if (event.keyCode === 40 && !player.crouching) {
       player.crouching = true;
-    if (player.velX > 0) {
+    if (player.direction === 'right') {
       player.x += 5;    
+      player.y += 35;    
     } else {
       player.x -= 35;
+      player.y += 35;    
     }
   }
 
-  if (event.keyCode === 38 && !UP && player.jumpLimit > 0) {
-    player.velY = -player.speed * 4;
-    UP = true;
-    player.jumpLimit --;
+  if (event.keyCode === 38 && !player.jumping && player.jumpLimit > 0) {
+    player.jump();
   }
   keyboard[event.keyCode] = true;
 });
 document.addEventListener('keyup', (event) => {
   if (event.keyCode === 40 && player.crouching) {
     player.crouching = false;
-    if (player.velX > 0) {
+    if (player.direction === 'right') {
       player.x -= 5;    
+      player.y -= 30;    
     } else {
       player.x += 35;
+      player.y -= 30;    
     }
   }
 
-  UP = false;
+  player.jumping = false;
   keyboard[event.keyCode] = false;
 });
 
@@ -57,8 +60,8 @@ document.addEventListener('keyup', (event) => {
 // ================== UPDATE PAGE ===================
 // ==================================================
 function update() {
-  player.height = 40;
-  player.width = 10;
+  player.stand();
+  player.setDirection();
   // Looking for keyboard press
   // if (keyboard[38] && !keyboard[40]) { // 38 === 'up arrow' | 
   //   if (!player.jumping) {
@@ -67,18 +70,14 @@ function update() {
   //   }
   // }
   if (keyboard[39] && !keyboard[40]) { // 39 === 'right arrow'
-    if (player.velX < player.speed) {
-      player.velX ++;
-    }
+    player.moveRight();
   }
   if (keyboard[37] && !keyboard[40]) { // 37 === 'left arrow'
-    if (player.velX > -player.speed) {
-      player.velX --;
-    }
+    player.moveLeft();
   }
 
   if (keyboard[40]) { // 40 === 'down arrow'
-    slide();
+    player.slide();
   } else {
     player.velX *= FRICTION;
   }
@@ -87,44 +86,106 @@ function update() {
   player.x += player.velX;
   player.y += player.velY;
 
-  if (player.x >= CANVAS_WIDTH - player.width) {
-    player.x = CANVAS_WIDTH - player.width;
-    player.velX *= -1;
-  } else if (player.x <= 0) {
-    player.velX *= -1;
-    player.x = 0;
-  }
 
-  if (player.y >= CANVAS_HEIGHT - player.height) {
-    player.y = CANVAS_HEIGHT - player.height;
-    player.jumping = false;
-    player.jumpLimit = 2;
-  } else if (player.y <= 0) {
-    player.y = 0;
-  }
+  collisionCheck(player, brick);
+  collisionCheck(player, brick2);
+  collisionCheck(player, brick3);
+  setBorders(player);
 
   // slows down gravity if holding 'down arrow'
-  if (player.y < CANVAS_HEIGHT - player.height) {
-    if (keyboard[40] && player.velY > 0) {
-      player.velY -= 0.7;
+  player.glide();
+
+  clearCanvas();
+  brick.render();
+  brick2.render();
+  brick3.render();
+  player.render();
+  requestAnimationFrame(update);
+}
+
+
+
+// ==================================================
+// ==================== ACTIONS =====================
+// ==================================================
+function collisionCheck(player, object) {
+  // get the vectors to check against
+  let vectorX = (player.x + (player.width / 2)) - (object.x + (object.width / 2));
+  let vectorY = (player.y + (player.height / 2)) - (object.y + (object.height / 2));
+  let halfWidths = (player.width / 2) + (object.width / 2);
+  let halfHeights = (player.height / 2) + (object.height / 2);
+      // add the half widths and half heights of the objects
+  let collisionDirection = null;
+
+  // if the x and y vector are less than the half width or half height, they we must be inside the object, causing a collision
+  if (Math.abs(vectorX) < halfWidths && Math.abs(vectorY) < halfHeights) {         
+    // figures out on which side we are colliding (top, bottom, left, or right)         
+    var distanceX = halfWidths - Math.abs(vectorX),             
+        distanceY = halfHeights - Math.abs(vectorY); 
+
+    if (distanceX >= distanceY) {
+      if (vectorY > 0) {
+          collisionDirection = "bottom";
+          player.y += distanceY;
+          player.velY = 0;
+        } else {
+          collisionDirection = "top";
+          player.resetJump();
+          player.y -= distanceY;
+          player.velY = 0;
+      }
+    } else {
+      if (vectorX > 0) {
+        collisionDirection = "right";
+        player.x += distanceX;
+      } else {
+        collisionDirection = "left";
+        player.x -= distanceX;
+      }
     }
   }
+  return collisionDirection;
+}
 
+function setBorders(model) {
+  setTopAndBottomBorders(model);
+  setLeftAndRightBorders(model);
+}
+
+function setTopAndBottomBorders(model) {
+  // mattL - configure the bottom of canvas
+  if (model.y >= CANVAS_HEIGHT - model.height) {
+    model.y = CANVAS_HEIGHT - model.height;
+    
+    if (model.type === 'character') {
+      model.resetJump();
+    }
+  // mattL - configure the top of canvas
+  } else if (model.y <= 0) {
+    model.y = 0;
+  }
+}
+
+function setLeftAndRightBorders(model) {
+  // mattL - configure the right side of canvas
+  if (model.x >= CANVAS_WIDTH - model.width) {
+    model.x = CANVAS_WIDTH - model.width;
+    model.velX *= -1;
+
+  // mattL - configure the left side of canvas
+  } else if (model.x <= 0) {
+    model.velX *= -1;
+    model.x = 0;
+  }
+}
+
+// ==================================================
+// ==================== RENDER =====================
+// ==================================================
+function clearCanvas() {
   ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-  ctx.fillStyle = 'orangered';
-  ctx.fillRect(player.x, player.y, player.width, player.height);
-  requestAnimationFrame(update);
 }
 
 window.addEventListener('load', () => {
   update();
 });
-
-// ==================================================
-// ==================== ACTIONS =====================
-// ==================================================
-function slide() {
-  player.velX *= (FRICTION * 1.160);
-  player.height = 10;
-  player.width = 40;
-}
