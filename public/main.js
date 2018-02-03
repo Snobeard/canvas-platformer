@@ -27,11 +27,11 @@ document.addEventListener('keydown', (event) => {
   if (event.keyCode === 40 && !player.crouching) {
       player.crouching = true;
     if (player.direction === 'right') {
-      player.x += 5;    
-      player.y += 35;    
+      player.x += player.default.width / 2;    
+      player.y += player.default.height * 0.75;    
     } else {
-      player.x -= 35;
-      player.y += 35;    
+      player.x -= player.default.height * 0.875;
+      player.y += player.default.height * 0.75;    
     }
   }
 
@@ -44,11 +44,11 @@ document.addEventListener('keyup', (event) => {
   if (event.keyCode === 40 && player.crouching) {
     player.crouching = false;
     if (player.direction === 'right') {
-      player.x -= 5;    
-      player.y -= 30;    
+      player.x -= player.default.width / 2;    
+      player.y -= player.default.height * 0.75;    
     } else {
-      player.x += 35;
-      player.y -= 30;    
+      player.x += player.default.height * 0.875;
+      player.y -= player.default.height * 0.75;    
     }
   }
 

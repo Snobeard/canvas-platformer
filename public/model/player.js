@@ -4,26 +4,32 @@
 class Player {
   constructor() {
     this.type = 'character';
+    this.default = {
+      height: 40,
+      width: 10,
+      jumpLimit: 2,
+    }
   
     this.x = CANVAS_WIDTH / 2;
     this.y = CANVAS_HEIGHT - 400;
-    this.width = 10;
-    this.height = 40;
+    this.width = this.default.width;
+    this.height = this.default.height;
     this.speed = 3;
     this.velX = 0;
     this.velY = 0;
     this.jumping = false;
-    this.jumpLimit = 2;
+    this.jumpLimit = this.default.jumpLimit;
     this.crouching = false;
     this.falling = true;
     this.direction = 'right';
+
   }
   
   // ========================================
   // ============ PLAYER ACTIONS ============
   // ========================================
   resetJump() {
-    this.jumpLimit = 2;
+    this.jumpLimit = this.default.jumpLimit;
   };
 
   jump() {
@@ -45,8 +51,8 @@ class Player {
   }
 
   stand() {
-    this.width = 10;
-    this.height = 40;
+    this.width = this.default.width;
+    this.height = this.default.height;
   }
 
   slide() {
@@ -63,8 +69,8 @@ class Player {
   }
 
   crouch() {
-    this.height = 10;
-    this.width = 40;
+    this.height = this.default.width;
+    this.width = this.default.height;
   }
 
 
