@@ -13,7 +13,7 @@ class Spike {
   }
   
   render() {
-    ctx.fillStyle = '#333333';
+    ctx.fillStyle = 'red';
     ctx.fillRect(this.x, this.y, this.width, this.height);
   }
 }

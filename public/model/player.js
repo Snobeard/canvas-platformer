@@ -8,7 +8,7 @@ class Player {
       height: 40,
       width: 10,
       jumpLimit: 2,
-    }
+    };
   
     this.x = CANVAS_WIDTH / 2;
     this.y = CANVAS_HEIGHT - 400;
@@ -28,18 +28,18 @@ class Player {
   // ========================================
   // ============ PLAYER ACTIONS ============
   // ========================================
-  resetPosition(){
+  resetPosition(){ // Dalton - this will reset character to beginning position
     this.x = CANVAS_WIDTH / 2;
     this.y = CANVAS_HEIGHT - 400;
   }
   resetJump() {
     this.jumpLimit = this.default.jumpLimit;
-  };
+  }
 
   jump() {
-  this.velY = -this.speed * 4;
-  this.jumping = true;
-  this.jumpLimit --;
+    this.velY = -this.speed * 4;
+    this.jumping = true;
+    this.jumpLimit --;
   }
 
   moveRight() {

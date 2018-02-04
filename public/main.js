@@ -20,7 +20,7 @@ let keyboard = {};
 let player = new Player();
 let brick = new Brick();
 let brick2 = new Brick(100, 200);
-let brick3 = new Brick(200, 100, 20, 10);
+let brick3 = new Brick(200, 100);
 // ====HAZARDS===== 
 let spike = new Spike();
 let spike2 = new Spike(160);
@@ -170,6 +170,8 @@ function spikeCollision (player, object, collisionCheck) {
     player.resetPosition();
   }
 }
+
+
 
 function setBorders(model) {
   setTopAndBottomBorders(model);
