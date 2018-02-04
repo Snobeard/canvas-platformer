@@ -6,7 +6,7 @@ class Player {
     this.type = 'character';
     this.color = 'orangered';
     this.default = {
-      x: CANVAS_WIDTH / 2,
+      x: CANVAS_WIDTH / 2 - 50,
       y: CANVAS_HEIGHT - 400,
       height: 40,
       width: 10,

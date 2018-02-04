@@ -22,13 +22,15 @@ let player = new Player();
 let bricks = [
   new Brick(),
   new Brick(100, 200),
-  new Brick(200, 100, player.default.width, player.default.width),
+  new Brick(200, 100),
+  new Brick(375, 100),
 ];
 // ====HAZARDS===== 
 let spikes = [
-  new Spike(undefined, 200, 100, undefined),
-  new Spike(160, 200, 100, undefined),
-  new Spike(),
+  new Spike(100),
+  new Spike(300),
+  new Spike(500),
+  new Spike(700),
 ];
 
 
@@ -90,10 +92,7 @@ function update() {
 
   player.x += player.velX;
   player.y += player.velY;
-  
-  
-  
-  // mattL - setting the borders needs to happen before the spike check
+
   setBorders(player);
   collisionCheck(player, bricks);
   spikeCheck(player, spikes);

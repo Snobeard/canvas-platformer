@@ -17,6 +17,17 @@ class Spike {
   
   render() {
     ctx.fillStyle = this.color;
-    ctx.fillRect(this.x, this.y, this.width, this.height);
+    // ctx.fillRect(this.x, this.y, this.width, this.height);
+    ctx.beginPath();
+    ctx.moveTo(this.x + (this.width / 2), this.y + this.height); // top point
+    ctx.lineTo(this.x, this.y); // left point
+    ctx.lineTo(this.x + this.width, this.y); // right point
+    ctx.fill(); 
+
+    ctx.beginPath();
+    ctx.moveTo(this.x + (this.width / 2), this.y); // top point
+    ctx.lineTo(this.x - (this.width / 2), this.y); // left point
+    ctx.lineTo(this.x + (this.width / 2), this.y - this.height); // right point
+    ctx.fill(); 
   }
 }
