@@ -4,13 +4,14 @@
 class Player {
   constructor() {
     this.type = 'character';
+    this.color = 'orangered';
     this.default = {
       x: CANVAS_WIDTH / 2,
       y: CANVAS_HEIGHT - 400,
       height: 40,
       width: 10,
       jumpLimit: 2,
-    }
+    };
   
     this.x = this.default.x;
     this.y = this.default.y;
@@ -33,18 +34,18 @@ class Player {
   resetPosition(){
     this.velY = 0;
     this.velX = 0;
-    this.x = this.default.x
+    this.x = this.default.x;
     this.y = this.default.y;
   }
   
   resetJump() {
     this.jumpLimit = this.default.jumpLimit;
-  };
+  }
 
   jump() {
-  this.velY = -this.speed * 4;
-  this.jumping = true;
-  this.jumpLimit --;
+    this.velY = -this.speed * 4;
+    this.jumping = true;
+    this.jumpLimit --;
   }
 
   moveRight() {  
@@ -93,7 +94,7 @@ class Player {
 
   // mattL - set this color and size
   render() {
-    ctx.fillStyle = 'orangered';
+    ctx.fillStyle = this.color;
     ctx.fillRect(this.x, this.y, this.width, this.height);
   }
 

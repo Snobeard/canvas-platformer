@@ -6,6 +6,9 @@ class Brick {
     width = 60, 
     height = 10
   ) {
+    this.type = 'platform';
+    this.color = '#333333';
+
     this.x = x;
     this.y = y;
     this.width = width;
@@ -13,7 +16,7 @@ class Brick {
   }
 
   render() {
-    ctx.fillStyle = '#333333';
+    ctx.fillStyle = this.color;
     ctx.fillRect(this.x, this.y, this.width, this.height);
   }
 }

@@ -6,6 +6,9 @@ class Spike {
     width = 10, 
     height = 10
   ) {
+    this.type = 'spike';
+    this.color = 'red';
+
     this.x = x;
     this.y = y;
     this.width = width;
@@ -13,7 +16,7 @@ class Spike {
   }
   
   render() {
-    ctx.fillStyle = '#333333';
+    ctx.fillStyle = this.color;
     ctx.fillRect(this.x, this.y, this.width, this.height);
   }
 }

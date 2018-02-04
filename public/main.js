@@ -22,12 +22,13 @@ let player = new Player();
 let bricks = [
   new Brick(),
   new Brick(100, 200),
-  new Brick(200, 100, 20, 10),
+  new Brick(200, 100, player.default.width, player.default.width),
 ];
 // ====HAZARDS===== 
 let spikes = [
+  new Spike(undefined, 200, 100, undefined),
+  new Spike(160, 200, 100, undefined),
   new Spike(),
-  new Spike(160),
 ];
 
 
@@ -53,6 +54,7 @@ document.addEventListener('keydown', (event) => {
   }
   keyboard[event.keyCode] = true;
 });
+
 document.addEventListener('keyup', (event) => {
   if (event.keyCode === 40 && player.crouching) {
     player.crouching = false;
@@ -78,7 +80,7 @@ function update() {
   player.moveRight();
   player.moveLeft();
   player.glide();
-
+  
   if (keyboard[40]) { // 40 === 'down arrow'
     player.slide();
   } else {
@@ -88,28 +90,19 @@ function update() {
 
   player.x += player.velX;
   player.y += player.velY;
-
-
-  collisionCheck(player, bricks);
-  // collisionCheck(player, brick2);
-  // collisionCheck(player, brick3);
+  
+  
+  
+  // mattL - setting the borders needs to happen before the spike check
   setBorders(player);
-
+  collisionCheck(player, bricks);
   spikeCheck(player, spikes);
-  // spikeCollision(player, spike2, collisionCheck);
 
-  // slows down gravity if holding 'down arrow'
 
   clearCanvas();
   bricks.forEach(brick => brick.render());
-  // bricks.render();
-  // brick2.render();
-  // brick3.render();
-  player.render();
-
   spikes.forEach(spike => spike.render());
-  // spike.render();
-  // spike2.render();
+  player.render();
 
   requestAnimationFrame(update);
 }
@@ -157,19 +150,10 @@ function collisionCheck(player, objects) {
       }
     }
   });
-  // return true;
 }
 
 
 // RESET PLAYER WHEN SPIKE IS TOUCHED
-
-// function spikeCollision (player, objects, collisionCheck) {
-//   while(collisionCheck(player, objects)){
-//     console.log('spikes');
-//     player.resetPosition();
-//   }
-// }
-
 function spikeCheck(player, spikes) {
   spikes.forEach(spike => {
     // get the vectors to check against
@@ -186,7 +170,6 @@ function spikeCheck(player, spikes) {
     }
   }); 
 }
-
 
 function setBorders(model) {
   setTopAndBottomBorders(model);
