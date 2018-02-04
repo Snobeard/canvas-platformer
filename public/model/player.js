@@ -28,6 +28,10 @@ class Player {
   // ========================================
   // ============ PLAYER ACTIONS ============
   // ========================================
+  resetPosition(){
+    this.x = CANVAS_WIDTH / 2;
+    this.y = CANVAS_HEIGHT - 400;
+  }
   resetJump() {
     this.jumpLimit = this.default.jumpLimit;
   };

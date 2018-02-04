@@ -100,6 +100,9 @@ function update() {
   collisionCheck(player, brick3);
   setBorders(player);
 
+  spikeCollision(player, spike, collisionCheck);
+  spikeCollision(player, spike2, collisionCheck);
+
   // slows down gravity if holding 'down arrow'
   player.glide();
 
@@ -162,8 +165,10 @@ function collisionCheck(player, object) {
 
 // RESET PLAYER WHEN SPIKE IS TOUCHED
 
-function spikeCollision (player, object) {
-
+function spikeCollision (player, object, collisionCheck) {
+  while(collisionCheck(player,object)){
+    player.resetPosition();
+  }
 }
 
 function setBorders(model) {
