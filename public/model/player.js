@@ -5,13 +5,15 @@ class Player {
   constructor() {
     this.type = 'character';
     this.default = {
+      x: CANVAS_WIDTH / 2,
+      y: CANVAS_HEIGHT - 400,
       height: 40,
       width: 10,
       jumpLimit: 2,
     };
   
-    this.x = CANVAS_WIDTH / 2;
-    this.y = CANVAS_HEIGHT - 400;
+    this.x = this.default.x;
+    this.y = this.default.y;
     this.width = this.default.width;
     this.height = this.default.height;
     this.speed = 3;
@@ -28,10 +30,13 @@ class Player {
   // ========================================
   // ============ PLAYER ACTIONS ============
   // ========================================
-  resetPosition(){ // Dalton - this will reset character to beginning position
-    this.x = CANVAS_WIDTH / 2;
-    this.y = CANVAS_HEIGHT - 400;
+  resetPosition(){
+    this.velY = 0;
+    this.velX = 0;
+    this.x = this.default.x;
+    this.y = this.default.y;
   }
+  
   resetJump() {
     this.jumpLimit = this.default.jumpLimit;
   }
