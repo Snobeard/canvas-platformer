@@ -18,12 +18,17 @@ console.log('MAIN.JS: -LOADED-');
 let keyboard = {};
 
 let player = new Player();
-let brick = new Brick();
-let brick2 = new Brick(100, 200);
-let brick3 = new Brick(200, 100, 20, 10);
+
+let bricks = [
+  new Brick(),
+  new Brick(100, 200),
+  new Brick(200, 100, 20, 10),
+];
 // ====HAZARDS===== 
-let spike = new Spike();
-let spike2 = new Spike(160);
+let spikes = [
+  new Spike(),
+  new Spike(160),
+];
 
 
 
@@ -70,19 +75,9 @@ document.addEventListener('keyup', (event) => {
 function update() {
   player.stand();
   player.setDirection();
-  // Looking for keyboard press
-  // if (keyboard[38] && !keyboard[40]) { // 38 === 'up arrow' | 
-  //   if (!player.jumping) {
-  //     player.jumping = true;
-  //     player.velY = -player.speed * 4;
-  //   }
-  // }
-  if (keyboard[39] && !keyboard[40]) { // 39 === 'right arrow'
-    player.moveRight();
-  }
-  if (keyboard[37] && !keyboard[40]) { // 37 === 'left arrow'
-    player.moveLeft();
-  }
+  player.moveRight();
+  player.moveLeft();
+  player.glide();
 
   if (keyboard[40]) { // 40 === 'down arrow'
     player.slide();
@@ -95,25 +90,26 @@ function update() {
   player.y += player.velY;
 
 
-  collisionCheck(player, brick);
-  collisionCheck(player, brick2);
-  collisionCheck(player, brick3);
+  collisionCheck(player, bricks);
+  // collisionCheck(player, brick2);
+  // collisionCheck(player, brick3);
   setBorders(player);
 
-  spikeCollision(player, spike, collisionCheck);
-  spikeCollision(player, spike2, collisionCheck);
+  spikeCheck(player, spikes);
+  // spikeCollision(player, spike2, collisionCheck);
 
   // slows down gravity if holding 'down arrow'
-  player.glide();
 
   clearCanvas();
-  brick.render();
-  brick2.render();
-  brick3.render();
+  bricks.forEach(brick => brick.render());
+  // bricks.render();
+  // brick2.render();
+  // brick3.render();
   player.render();
 
-  spike.render();
-  spike2.render();
+  spikes.forEach(spike => spike.render());
+  // spike.render();
+  // spike2.render();
 
   requestAnimationFrame(update);
 }
@@ -123,53 +119,74 @@ function update() {
 // ==================================================
 // ==================== ACTIONS =====================
 // ==================================================
-function collisionCheck(player, object) {
-  // get the vectors to check against
-  let vectorX = (player.x + (player.width / 2)) - (object.x + (object.width / 2));
-  let vectorY = (player.y + (player.height / 2)) - (object.y + (object.height / 2));
-  let halfWidths = (player.width / 2) + (object.width / 2);
-  let halfHeights = (player.height / 2) + (object.height / 2);
-  // add the half widths and half heights of the objects
-  let collisionDirection = null;
-
-  // if the x and y vector are less than the half width or half height, they we must be inside the object, causing a collision
-  if (Math.abs(vectorX) < halfWidths && Math.abs(vectorY) < halfHeights) {         
-    // figures out on which side we are colliding (top, bottom, left, or right)         
-    var distanceX = halfWidths - Math.abs(vectorX),             
-      distanceY = halfHeights - Math.abs(vectorY); 
-
-    if (distanceX >= distanceY) {
-      if (vectorY > 0) {
-        collisionDirection = 'bottom';
-        player.y += distanceY;
-        player.velY = 0;
+function collisionCheck(player, objects) {
+  objects.forEach((object) => {
+    // get the vectors to check against
+    let vectorX = (player.x + (player.width / 2)) - (object.x + (object.width / 2));
+    let vectorY = (player.y + (player.height / 2)) - (object.y + (object.height / 2));
+    let halfWidths = (player.width / 2) + (object.width / 2);
+    let halfHeights = (player.height / 2) + (object.height / 2);
+    // add the half widths and half heights of the objects
+    let collisionDirection = null;
+  
+    // if the x and y vector are less than the half width or half height, they we must be inside the object, causing a collision
+    if (Math.abs(vectorX) < halfWidths && Math.abs(vectorY) < halfHeights) {         
+      // figures out on which side we are colliding (top, bottom, left, or right)         
+      var distanceX = halfWidths - Math.abs(vectorX),             
+        distanceY = halfHeights - Math.abs(vectorY); 
+  
+      if (distanceX >= distanceY) {
+        if (vectorY > 0) {
+          collisionDirection = 'bottom';
+          player.y += distanceY;
+          player.velY = 0;
+        } else {
+          collisionDirection = 'top';
+          player.resetJump();
+          player.y -= distanceY;
+          player.velY = 0;
+        }
       } else {
-        collisionDirection = 'top';
-        player.resetJump();
-        player.y -= distanceY;
-        player.velY = 0;
-      }
-    } else {
-      if (vectorX > 0) {
-        collisionDirection = 'right';
-        player.x += distanceX;
-      } else {
-        collisionDirection = 'left';
-        player.x -= distanceX;
+        if (vectorX > 0) {
+          collisionDirection = 'right';
+          player.x += distanceX;
+        } else {
+          collisionDirection = 'left';
+          player.x -= distanceX;
+        }
       }
     }
-  }
-  return collisionDirection;
+  });
+  // return true;
 }
 
 
 // RESET PLAYER WHEN SPIKE IS TOUCHED
 
-function spikeCollision (player, object, collisionCheck) {
-  while(collisionCheck(player,object)){
-    player.resetPosition();
-  }
+// function spikeCollision (player, objects, collisionCheck) {
+//   while(collisionCheck(player, objects)){
+//     console.log('spikes');
+//     player.resetPosition();
+//   }
+// }
+
+function spikeCheck(player, spikes) {
+  spikes.forEach(spike => {
+    // get the vectors to check against
+    let vectorX = (player.x + (player.width / 2)) - (spike.x + (spike.width / 2));
+    let vectorY = (player.y + (player.height / 2)) - (spike.y + (spike.height / 2));
+    let halfWidths = (player.width / 2) + (spike.width / 2);
+    let halfHeights = (player.height / 2) + (spike.height / 2);
+    // add the half widths and half heights of the objects
+    let collisionDirection = null;
+  
+    // if the x and y vector are less than the half width or half height, they we must be inside the object, causing a collision
+    if (Math.abs(vectorX) < halfWidths && Math.abs(vectorY) < halfHeights) {
+      player.resetPosition();
+    }
+  }); 
 }
+
 
 function setBorders(model) {
   setTopAndBottomBorders(model);

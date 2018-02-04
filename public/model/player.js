@@ -47,15 +47,19 @@ class Player {
   this.jumpLimit --;
   }
 
-  moveRight() {
-    if (this.velX < this.speed) {
-      this.velX ++;
+  moveRight() {  
+    if (keyboard[39] && !keyboard[40]) { // 39 === 'right arrow'
+      if (this.velX < this.speed) {
+        this.velX ++;
+      }
     }
   }
 
   moveLeft() {
-    if (this.velX > -this.speed) {
-      this.velX --;
+    if (keyboard[37] && !keyboard[40]) { // 37 === 'left arrow'
+      if (this.velX > -this.speed) {
+        this.velX --;
+      }
     }
   }
 
