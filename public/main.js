@@ -21,11 +21,19 @@ let player = new Player();
 let brick = new Brick();
 let brick2 = new Brick(100, 200);
 let brick3 = new Brick(200, 100, 20, 10);
+// ====HAZARDS===== 
+let spike = new Spike();
+let spike2 = new Spike(160);
+
+
+
+
+
 
 document.addEventListener('keydown', (event) => {
   // console.log(event.keyCode);
   if (event.keyCode === 40 && !player.crouching) {
-      player.crouching = true;
+    player.crouching = true;
     if (player.direction === 'right') {
       player.x += player.default.width / 2;    
       player.y += player.default.height * 0.75;    
@@ -100,6 +108,10 @@ function update() {
   brick2.render();
   brick3.render();
   player.render();
+
+  spike.render();
+  spike2.render();
+
   requestAnimationFrame(update);
 }
 
@@ -114,37 +126,44 @@ function collisionCheck(player, object) {
   let vectorY = (player.y + (player.height / 2)) - (object.y + (object.height / 2));
   let halfWidths = (player.width / 2) + (object.width / 2);
   let halfHeights = (player.height / 2) + (object.height / 2);
-      // add the half widths and half heights of the objects
+  // add the half widths and half heights of the objects
   let collisionDirection = null;
 
   // if the x and y vector are less than the half width or half height, they we must be inside the object, causing a collision
   if (Math.abs(vectorX) < halfWidths && Math.abs(vectorY) < halfHeights) {         
     // figures out on which side we are colliding (top, bottom, left, or right)         
     var distanceX = halfWidths - Math.abs(vectorX),             
-        distanceY = halfHeights - Math.abs(vectorY); 
+      distanceY = halfHeights - Math.abs(vectorY); 
 
     if (distanceX >= distanceY) {
       if (vectorY > 0) {
-          collisionDirection = "bottom";
-          player.y += distanceY;
-          player.velY = 0;
-        } else {
-          collisionDirection = "top";
-          player.resetJump();
-          player.y -= distanceY;
-          player.velY = 0;
+        collisionDirection = 'bottom';
+        player.y += distanceY;
+        player.velY = 0;
+      } else {
+        collisionDirection = 'top';
+        player.resetJump();
+        player.y -= distanceY;
+        player.velY = 0;
       }
     } else {
       if (vectorX > 0) {
-        collisionDirection = "right";
+        collisionDirection = 'right';
         player.x += distanceX;
       } else {
-        collisionDirection = "left";
+        collisionDirection = 'left';
         player.x -= distanceX;
       }
     }
   }
   return collisionDirection;
+}
+
+
+// RESET PLAYER WHEN SPIKE IS TOUCHED
+
+function spikeCollision (player, object) {
+
 }
 
 function setBorders(model) {
