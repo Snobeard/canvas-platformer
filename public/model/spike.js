@@ -15,5 +15,10 @@ class Spike {
   render() {
     ctx.fillStyle = 'red';
     ctx.fillRect(this.x, this.y, this.width, this.height);
+    // ctx.beginPath();
+    // ctx.moveTo(275, 350);
+    // ctx.lineTo(250, 400);
+    // ctx.lineTo(300, 400);
+    // ctx.fill();
   }
 }

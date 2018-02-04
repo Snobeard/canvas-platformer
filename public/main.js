@@ -21,6 +21,7 @@ let player = new Player();
 let brick = new Brick();
 let brick2 = new Brick(100, 200);
 let brick3 = new Brick(200, 100);
+let brick4 = new Brick(375, 100);
 // ====HAZARDS===== 
 let spike = new Spike();
 let spike2 = new Spike(160);
@@ -98,6 +99,7 @@ function update() {
   collisionCheck(player, brick);
   collisionCheck(player, brick2);
   collisionCheck(player, brick3);
+  collisionCheck(player, brick4);
   setBorders(player);
 
   spikeCollision(player, spike, collisionCheck);
@@ -110,6 +112,7 @@ function update() {
   brick.render();
   brick2.render();
   brick3.render();
+  brick4.render();
   player.render();
 
   spike.render();
