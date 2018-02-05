@@ -33,11 +33,6 @@ let spikes = [
   new Spike(700),
 ];
 
-
-
-
-
-
 document.addEventListener('keydown', (event) => {
   // console.log(event.keyCode);
   if (event.keyCode === 40 && !player.crouching) {
@@ -123,7 +118,7 @@ function collisionCheck(player, objects) {
   
     // if the x and y vector are less than the half width or half height, they we must be inside the object, causing a collision
     if (Math.abs(vectorX) < halfWidths && Math.abs(vectorY) < halfHeights) {         
-      // figures out on which side we are colliding (top, bottom, left, or right)         
+      // figures out on which side we are colliding (top, bottom, left, or right)
       var distanceX = halfWidths - Math.abs(vectorX),             
         distanceY = halfHeights - Math.abs(vectorY); 
   
