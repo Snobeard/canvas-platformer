@@ -20,7 +20,7 @@ let keyboard = {};
 let player = new Player();
 
 let bricks = [
-  new Brick(),
+  new Brick(undefined, undefined, 200),
   new Brick(100, 200),
   new Brick(200, 100),
   new Brick(375, 100),
@@ -35,16 +35,16 @@ let spikes = [
 
 document.addEventListener('keydown', (event) => {
   // console.log(event.keyCode);
-  if (event.keyCode === 40 && !player.crouching) {
-    player.crouching = true;
-    if (player.direction === 'right') {
-      player.x += player.default.width / 2;    
-      player.y += player.default.height * 0.75;    
-    } else {
-      player.x -= player.default.height * 0.875;
-      player.y += player.default.height * 0.75;    
-    }
-  }
+  // if (event.keyCode === 40 && !player.crouching) {
+  //   player.crouching = true;
+  //   if (player.direction === 'right') {
+  //     player.x += player.default.width / 2;    
+  //     player.y += player.default.height * 0.75;    
+  //   } else {
+  //     player.x -= player.default.height * 0.875;
+  //     player.y += player.default.height * 0.75;    
+  //   }
+  // }
 
   if (event.keyCode === 38 && !player.jumping && player.jumpLimit > 0) {
     player.jump();
@@ -53,16 +53,16 @@ document.addEventListener('keydown', (event) => {
 });
 
 document.addEventListener('keyup', (event) => {
-  if (event.keyCode === 40 && player.crouching) {
-    player.crouching = false;
-    if (player.direction === 'right') {
-      player.x -= player.default.width / 2;    
-      player.y -= player.default.height * 0.75;    
-    } else {
-      player.x += player.default.height * 0.875;
-      player.y -= player.default.height * 0.75;    
-    }
-  }
+  // if (event.keyCode === 40 && player.crouching) {
+  //   player.crouching = false;
+  //   if (player.direction === 'right') {
+  //     player.x -= player.default.width / 2;    
+  //     player.y -= player.default.height * 0.75;    
+  //   } else {
+  //     player.x += player.default.height * 0.875;
+  //     player.y -= player.default.height * 0.75;    
+  //   }
+  // }
 
   player.jumping = false;
   keyboard[event.keyCode] = false;

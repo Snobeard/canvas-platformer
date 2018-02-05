@@ -8,8 +8,8 @@ class Player {
     this.default = {
       x: CANVAS_WIDTH / 2 - 50,
       y: CANVAS_HEIGHT - 400,
-      height: 40,
-      width: 10,
+      height: 27, // character height must be 27 or they fall through the bricks
+      width: 20,
       jumpLimit: 2,
     };
   
@@ -78,13 +78,24 @@ class Player {
     if (this.y < CANVAS_HEIGHT - this.height) {
       if (keyboard[40] && this.velY > 0) {
         this.velY -= 0.7;
+
+        ctx.drawImage(tuxedoMan, 
+          12, // image: x - location  
+          11, // image: y - location
+          10, // image: x - span
+          16, // image: y - span
+          this.x, // image: x- positioning
+          this.y, // image: y - positioning
+          this.width, // image: width
+          this.height + 2  // image: height
+        );
       }
     }
   }
 
   crouch() {
-    this.height = this.default.width;
-    this.width = this.default.height;
+    // this.height = this.default.width;
+    // this.width = this.default.height;
   }
 
 
@@ -94,8 +105,32 @@ class Player {
 
   // mattL - set this color and size
   render() {
-    ctx.fillStyle = this.color;
-    ctx.fillRect(this.x, this.y, this.width, this.height);
+    // ctx.fillStyle = this.color;
+    // ctx.fillRect(this.x, this.y, this.width, this.height);
+    let tuxedoMan = document.getElementById('tuxedo-man');
+    let properties = [
+      tuxedoMan,
+      12,
+      11,
+      10,
+      16,
+      this.x,
+      this.y,
+      this.width,
+      this.height + 2
+    ];
+    this.drawCharacter(properties);
+    // ctx.drawImage(tuxedoMan, 
+    //   12, // image: x - location  
+    //   11, // image: y - location
+    //   10, // image: x - span
+    //   16, // image: y - span
+    //   this.x, // image: x- positioning
+    //   this.y, // image: y - positioning
+    //   this.width, // image: width
+    //   this.height + 2  // image: height
+    // );
+    
   }
 
   setDirection() {
@@ -105,4 +140,10 @@ class Player {
       this.direction = 'left';
     }
   }
+
+  drawCharacter(properties) {
+    ctx.drawImage(...properties);
+  }
+  
 }
+
