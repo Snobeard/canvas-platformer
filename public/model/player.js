@@ -25,12 +25,13 @@ class Player {
     this.crouching = false;
     this.falling = true;
     this.direction = 'right';
+    this.characterFrame = 0;
   }
   
   // ========================================
   // ============ PLAYER ACTIONS ============
   // ========================================
-  resetPosition(){
+  resetPosition() {
     this.velY = 0;
     this.velX = 0;
     this.x = this.default.x;
@@ -104,6 +105,8 @@ class Player {
 
   // mattL - set this color and size
   render() {
+    this.setFalling();
+    
     let standingCharacter = [
       12, // image: x - location  
       11, // image: y - location
@@ -114,28 +117,104 @@ class Player {
       this.width, // image: width
       this.height + 2  // image: height
     ];
-    let movingCharacter = [
-      52, // image: x - location  
+
+    let movingCharacter = {
+      // sequence 1
+      1: [ 
+        52, // image: x - location  
+        11, // image: y - location
+        12, // image: x - span
+        16, // image: y - span
+        this.x, // image: x- positioning
+        this.y, // image: y - positioning
+        this.width, // image: width
+        this.height + 2  // image: height
+      ],
+      // sequence 2
+      2: [ 
+        52, // image: x - location  
+        40, // image: y - location
+        12, // image: x - span
+        16, // image: y - span
+        this.x, // image: x- positioning
+        this.y, // image: y - positioning
+        this.width, // image: width
+        this.height + 2  // image: height
+      ],
+      // sequence 3
+      3: [ 
+        52, // image: x - location  
+        71, // image: y - location
+        12, // image: x - span
+        16, // image: y - span
+        this.x, // image: x- positioning
+        this.y, // image: y - positioning
+        this.width, // image: width
+        this.height + 2  // image: height
+      ],
+      // sequence 4
+      4: [ 
+        52, // image: x - location  
+        101, // image: y - location
+        12, // image: x - span
+        16, // image: y - span
+        this.x, // image: x- positioning
+        this.y, // image: y - positioning
+        this.width, // image: width
+        this.height + 2  // image: height
+      ],
+      // sequence 5
+      5: [ 
+        52, // image: x - location  
+        130, // image: y - location
+        12, // image: x - span
+        16, // image: y - span
+        this.x, // image: x- positioning
+        this.y, // image: y - positioning
+        this.width, // image: width
+        this.height + 2  // image: height
+      ],
+      // sequence 6
+      6: [ 
+        52, // image: x - location  
+        161, // image: y - location
+        12, // image: x - span
+        16, // image: y - span
+        this.x, // image: x- positioning
+        this.y, // image: y - positioning
+        this.width, // image: width
+        this.height + 2  // image: height
+      ],
+    };
+
+    let fallingCharacter = [
+      215, // image: x - location  
       40, // image: y - location
-      12, // image: x - span
+      13, // image: x - span
       16, // image: y - span
       this.x, // image: x- positioning
       this.y, // image: y - positioning
       this.width, // image: width
       this.height + 2  // image: height
     ];
-    
-    // mattL - if the velocity is greater than 0.5 
-    //         then the player is moving at a noticeable rate
 
-    if (Math.abs(this.velX) > 0.5) {
-      this.drawCharacter(movingCharacter);
-    } else {
-      this.drawCharacter(standingCharacter);
-    }
 
-    // this.drawCharacter(movingRight);
+    // // mattL - if the velocity is greater than 0.5 
+    // //         then the player is moving at a noticeable rate
+    // if (Math.abs(this.velX) > 0.5) {
+    //   this.characterFrame += 1;
+    //   // mattL - increments the movingCharacter Frame Sequence to make the
+    //   //         character look like it's moving. '/ 5' sets the animation speed
+    //   let frame = Math.floor(this.characterFrame / 5);
+    //   // mattL - '(% 6) + 1' selects the character frame
+    //   //         ex: sequence 1 through 6
+    //   this.drawCharacter(movingCharacter[(frame % 6) + 1]);
+    // } else {
+    //   this.characterFrame = 0;
+    //   this.drawCharacter(standingCharacter);
+    // }
 
+    this.drawCharacter(fallingCharacter);
   }
 
   setDirection() {
@@ -143,6 +222,14 @@ class Player {
       this.direction = 'right';
     } else {
       this.direction = 'left';
+    }
+  }
+
+  setFalling() {
+    if (this.velY <= 0) {
+      this.falling = false;
+    } else {
+      this.falling = true;
     }
   }
 
