@@ -25,7 +25,6 @@ class Player {
     this.crouching = false;
     this.falling = true;
     this.direction = 'right';
-
   }
   
   // ========================================
@@ -79,16 +78,16 @@ class Player {
       if (keyboard[40] && this.velY > 0) {
         this.velY -= 0.7;
 
-        ctx.drawImage(tuxedoMan, 
-          12, // image: x - location  
-          11, // image: y - location
-          10, // image: x - span
-          16, // image: y - span
-          this.x, // image: x- positioning
-          this.y, // image: y - positioning
-          this.width, // image: width
-          this.height + 2  // image: height
-        );
+        // ctx.drawImage(tuxedoMan, 
+        //   12, // image: x - location  
+        //   11, // image: y - location
+        //   10, // image: x - span
+        //   16, // image: y - span
+        //   this.x, // image: x- positioning
+        //   this.y, // image: y - positioning
+        //   this.width, // image: width
+        //   this.height + 2  // image: height
+        // );
       }
     }
   }
@@ -105,32 +104,49 @@ class Player {
 
   // mattL - set this color and size
   render() {
-    // ctx.fillStyle = this.color;
-    // ctx.fillRect(this.x, this.y, this.width, this.height);
-    let tuxedoMan = document.getElementById('tuxedo-man');
-    let properties = [
-      tuxedoMan,
-      12,
-      11,
-      10,
-      16,
-      this.x,
-      this.y,
-      this.width,
-      this.height + 2
+    let standingCharacter = [
+      12, // image: x - location  
+      11, // image: y - location
+      10, // image: x - span
+      16, // image: y - span
+      this.x, // image: x- positioning
+      this.y, // image: y - positioning
+      this.width, // image: width
+      this.height + 2  // image: height
     ];
-    this.drawCharacter(properties);
-    // ctx.drawImage(tuxedoMan, 
-    //   12, // image: x - location  
-    //   11, // image: y - location
-    //   10, // image: x - span
-    //   16, // image: y - span
-    //   this.x, // image: x- positioning
-    //   this.y, // image: y - positioning
-    //   this.width, // image: width
-    //   this.height + 2  // image: height
-    // );
-    
+    let movingRight = [
+      20, // image: x - location  
+      11, // image: y - location
+      10, // image: x - span
+      16, // image: y - span
+      this.x, // image: x- positioning
+      this.y, // image: y - positioning
+      this.width, // image: width
+      this.height + 2  // image: height
+    ];
+    let movingLeft = [
+      5, // image: x - location  
+      11, // image: y - location
+      10, // image: x - span
+      16, // image: y - span
+      this.x, // image: x- positioning
+      this.y, // image: y - positioning
+      this.width, // image: width
+      this.height + 2  // image: height
+    ];
+
+    // mattL - if the velocity is greater than 0.4 
+    //         then the player is moving at a noticeable rate
+    if (Math.abs(this.velX) > 0.5) {
+      if (this.direction === 'right') {
+        this.drawCharacter(movingRight);
+      } else {
+        this.drawCharacter(movingLeft);
+      }
+    } else {
+      this.drawCharacter(standingCharacter);
+    }
+
   }
 
   setDirection() {
@@ -142,7 +158,8 @@ class Player {
   }
 
   drawCharacter(properties) {
-    ctx.drawImage(...properties);
+    let tuxedoMan = document.getElementById('tuxedo-man');
+    ctx.drawImage(tuxedoMan, ...properties);
   }
   
 }
