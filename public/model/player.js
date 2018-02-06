@@ -78,17 +78,6 @@ class Player {
     if (this.y < CANVAS_HEIGHT - this.height) {
       if (keyboard[40] && this.velY > 0) {
         this.velY -= 0.7;
-
-        // ctx.drawImage(tuxedoMan, 
-        //   12, // image: x - location  
-        //   11, // image: y - location
-        //   10, // image: x - span
-        //   16, // image: y - span
-        //   this.x, // image: x- positioning
-        //   this.y, // image: y - positioning
-        //   this.width, // image: width
-        //   this.height + 2  // image: height
-        // );
       }
     }
   }
