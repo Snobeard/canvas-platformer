@@ -8,7 +8,7 @@ class Player {
     this.default = {
       x: CANVAS_WIDTH / 2 - 50,
       y: CANVAS_HEIGHT - 400,
-      height: 27, // character height must be 27 or they fall through the bricks
+      height: 28, // character height must be 28 or they fall through the bricks
       width: 20,
       jumpLimit: 2,
     };
@@ -107,45 +107,34 @@ class Player {
     let standingCharacter = [
       12, // image: x - location  
       11, // image: y - location
-      10, // image: x - span
+      11, // image: x - span
       16, // image: y - span
       this.x, // image: x- positioning
       this.y, // image: y - positioning
       this.width, // image: width
       this.height + 2  // image: height
     ];
-    let movingRight = [
-      20, // image: x - location  
-      11, // image: y - location
-      10, // image: x - span
+    let movingCharacter = [
+      52, // image: x - location  
+      40, // image: y - location
+      12, // image: x - span
       16, // image: y - span
       this.x, // image: x- positioning
       this.y, // image: y - positioning
       this.width, // image: width
       this.height + 2  // image: height
     ];
-    let movingLeft = [
-      5, // image: x - location  
-      11, // image: y - location
-      10, // image: x - span
-      16, // image: y - span
-      this.x, // image: x- positioning
-      this.y, // image: y - positioning
-      this.width, // image: width
-      this.height + 2  // image: height
-    ];
-
-    // mattL - if the velocity is greater than 0.4 
+    
+    // mattL - if the velocity is greater than 0.5 
     //         then the player is moving at a noticeable rate
+
     if (Math.abs(this.velX) > 0.5) {
-      if (this.direction === 'right') {
-        this.drawCharacter(movingRight);
-      } else {
-        this.drawCharacter(movingLeft);
-      }
+      this.drawCharacter(movingCharacter);
     } else {
       this.drawCharacter(standingCharacter);
     }
+
+    // this.drawCharacter(movingRight);
 
   }
 
@@ -158,7 +147,15 @@ class Player {
   }
 
   drawCharacter(properties) {
-    let tuxedoMan = document.getElementById('tuxedo-man');
+    let leftTuxedoMan = document.getElementById('left-tuxedo-man');
+    let rightTuxedoMan = document.getElementById('right-tuxedo-man');
+    let tuxedoMan = null;
+
+    if (this.direction === 'left') {
+      tuxedoMan = leftTuxedoMan;  
+    } else {
+      tuxedoMan = rightTuxedoMan;
+    }
     ctx.drawImage(tuxedoMan, ...properties);
   }
   
